@@ -30,7 +30,7 @@ class TftpProcessor(object):
     start with an "_", check the example below
     """
 
-    class TftpPacketType(enum):
+    class TftpPacketType(enum.Enum):
         """
         Represents a TFTP packet type add the missing types here and
         modify the existing values as necessary.
