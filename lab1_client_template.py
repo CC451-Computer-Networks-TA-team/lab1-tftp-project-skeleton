@@ -88,7 +88,7 @@ class TftpProcessor(object):
 
         Leave this function as is.
         """
-        self.packet_buffer.pop(0)
+        return self.packet_buffer.pop(0)
 
     def has_pending_packets_to_be_sent(self):
         """
