@@ -88,7 +88,7 @@ class TftpProcessor(object):
 
         Leave this function as is.
         """
-        self.packet_buffer.pop(0)
+        return self.packet_buffer.pop(0)
 
     def has_pending_packets_to_be_sent(self):
         """
@@ -148,19 +148,39 @@ def do_socket_logic():
     pass
 
 
-def parse_user_input(address, operation, args=None):
+def parse_user_input(address, operation, file_name=None):
     # Your socket logic can go here,
     # you can surely add new functions
-    # to contain the socket code. But don't
-    # add socket code in the TftpProcessor class.
+    # to contain the socket code. 
+    # But don't add socket code in the TftpProcessor class.
     # Feel free to delete this code as long as the
     # functionality is preserved.
     if operation == "push":
-        print(f"Attempting to upload [{args}]...")
+        print(f"Attempting to upload [{file_name}]...")
         pass
     elif operation == "pull":
-        print(f"Attempting to download [{args}]...")
+        print(f"Attempting to download [{file_name}]...")
         pass
+
+
+def get_arg(param_index, default=None):
+    """
+        Gets a command line argument by index (note: index starts from 1)
+        If the argument is not supplies, it tries to use a default value.
+
+        If a default value isn't supplied, an error message is printed
+        and terminates the program.
+    """
+    try:
+        return sys.argv[param_index]
+    except IndexError as e:
+        if default:
+            return default
+        else:
+            print(e)
+            print(
+                f"[FATAL] The comamnd-line argument #[{param_index}] is missing")
+            exit(-1)    # Program execution failed.
 
 
 def main():
@@ -173,22 +193,17 @@ def main():
     check_file_name()
     print("*" * 50)
 
-    # This argument is required in both client and server.
+    # This argument is required.
     # For a server, this means the IP that the server socket
     # will use.
-    # For a client, it means the IP of the server.
-    ip_address = sys.argv[1]
+    # The IP of the server, some default values
+    # are provided. Feel free to modify them.
+    ip_address = get_arg(1, "127.0.0.1")
+    operation = get_arg(2, "pull")
+    file_name = get_arg(3, "test.txt")
 
-    # The following code is valid if you're implementing a client
-    # if you're implementing a server, remove those arguments and
-    # their usage.
-    try:
-        operation = sys.argv[2]
-        file_name = sys.argv[3]
-        # Modify this as needed.
-        parse_user_input(ip_address, operation, file_name)
-    except Exception as err:
-        print("Error: ", err)
+    # Modify this as needed.
+    parse_user_input(ip_address, operation, file_name)
 
 
 if __name__ == "__main__":

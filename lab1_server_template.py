@@ -88,12 +88,12 @@ class TftpProcessor(object):
 
         Leave this function as is.
         """
-        self.packet_buffer.pop(0)
+        return self.packet_buffer.pop(0)
 
     def has_pending_packets_to_be_sent(self):
         """
         Returns if any packets to be sent are available.
-        
+
         Leave this function as is.
         """
         return len(self.packet_buffer) != 0
@@ -115,6 +115,8 @@ def setup_sockets(address):
 
     Feel free to delete this function.
     """
+    # don't forget, the server's port is 69 (might require using sudo on Linux)
+    print(f"TFTP server started on on [{address}]...")
     pass
 
 
@@ -126,6 +128,26 @@ def do_socket_logic():
     Feel free to delete this function.
     """
     pass
+
+
+def get_arg(param_index, default=None):
+    """
+        Gets a command line argument by index (note: index starts from 1)
+        If the argument is not supplies, it tries to use a default value.
+
+        If a default value isn't supplied, an error message is printed
+        and terminates the program.
+    """
+    try:
+        return sys.argv[param_index]
+    except IndexError as e:
+        if default:
+            return default
+        else:
+            print(e)
+            print(
+                f"[FATAL] The comamnd-line argument #[{param_index}] is missing")
+            exit(-1)    # Program execution failed.
 
 
 def main():
@@ -142,7 +164,8 @@ def main():
     # For a server, this means the IP that the server socket
     # will use.
     # The IP of the server.
-    ip_address = sys.argv[1]
+    ip_address = get_arg(1, "127.0.0.1")
+    setup_sockets(ip_address)
 
 
 if __name__ == "__main__":
