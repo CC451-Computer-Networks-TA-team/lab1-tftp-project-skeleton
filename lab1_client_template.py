@@ -3,129 +3,147 @@ import sys
 import os
 import enum
 
+############################################
+############# O B J E C T S ################
+############################################
+# Logical objects to be used in your code.
+############################################
 
-class TftpProcessor(object):
+
+class PacketType(enum.Enum):
     """
-    Implements logic for a TFTP client.
-    The input to this object is a received UDP packet,
-    the output is the packets to be written to the socket.
+    Represents a TFTP packet type
 
-    This class MUST NOT know anything about the existing sockets
-    its input and outputs are byte arrays ONLY.
+    Fill in the remaining type numbers
+    as the RFC.
+    """
+    RRQ = 1
+    # Put other packet types here.
+    # TODO: implement this enum.
+    ACK = 4
 
-    Store the output packets in a buffer (some list) in this class
-    the function get_next_output_packet returns the first item in
-    the packets to be sent.
 
-    This class is also responsible for reading/writing files to the
-    hard disk.
+class Packet(object):
+    """
+    Represents a TFTP packet, add
+    fields you need as in make_ack.
 
-    Failing to comply with those requirements will invalidate
-    your submission.
-
-    Feel free to add more functions to this class as long as
-    those functions don't interact with sockets nor inputs from
-    user/sockets. For example, you can add functions that you
-    think they are "private" only. Private functions in Python
-    start with an "_", check the example below
+    Leave as is.
     """
 
-    class TftpPacketType(enum.Enum):
-        """
-        Represents a TFTP packet type add the missing types here and
-        modify the existing values as necessary.
-        """
-        RRQ = 1
-
-    def __init__(self):
-        """
-        Add and initialize the *internal* fields you need.
-        Do NOT change the arguments passed to this function.
-
-        Here's an example of what you can do inside this function.
-        """
-        self.packet_buffer = []
-        pass
-
-    def process_udp_packet(self, packet_data, packet_source):
-        """
-        Parse the input packet, execute your logic according to that packet.
-        packet data is a bytearray, packet source contains the address
-        information of the sender.
-        """
-        # Add your logic here, after your logic is done,
-        # add the packet to be sent to self.packet_buffer
-        # feel free to remove this line
-        print(f"Received a packet from {packet_source}")
-        in_packet = self._parse_udp_packet(packet_data)
-        out_packet = self._do_some_logic(in_packet)
-
-        # This shouldn't change.
-        self.packet_buffer.append(out_packet)
-
-    def _parse_udp_packet(self, packet_bytes):
-        """
-        You'll use the struct module here to determine
-        the type of the packet and extract other available
-        information.
-        """
-        pass
-
-    def _do_some_logic(self, input_packet):
-        """
-        Example of a private function that does some logic.
-        """
-        pass
-
-    def get_next_output_packet(self):
-        """
-        Returns the next packet that needs to be sent.
-        This function returns a byetarray representing
-        the next packet to be sent.
-
-        For example;
-        s_socket.send(tftp_processor.get_next_output_packet())
-
-        Leave this function as is.
-        """
-        return self.packet_buffer.pop(0)
-
-    def has_pending_packets_to_be_sent(self):
-        """
-        Returns if any packets to be sent are available.
-
-        Leave this function as is.
-        """
-        return len(self.packet_buffer) != 0
-
-    def request_file(self, file_path_on_server):
-        """
-        This method is only valid if you're implementing
-        a TFTP client, since the client requests or uploads
-        a file to/from a server, one of the inputs the client
-        accept is the file name. Remove this function if you're
-        implementing a server.
-        """
-        pass
-
-    def upload_file(self, file_path_on_server):
-        """
-        This method is only valid if you're implementing
-        a TFTP client, since the client requests or uploads
-        a file to/from a server, one of the inputs the client
-        accept is the file name. Remove this function if you're
-        implementing a server.
-        """
-        pass
+    def __init__(self, packet_type: PacketType):
+        self.packet_type = packet_type
 
 
-def check_file_name():
-    script_name = os.path.basename(__file__)
-    import re
-    matches = re.findall(r"(\d{4}_)+lab1\.(py|rar|zip)", script_name)
-    if not matches:
-        print(f"[WARN] File name is invalid [{script_name}]")
+def make_ack(blk) -> Packet:
+    # Example of making ACK packet.
+    p = Packet(PacketType.ACK)
+    # Note that this field is added but
+    # it's not defined in the constructor.
+    # use the same way to make other packets.
+    p.blk = blk
+    return p
+
+
+def make_rrq(file_name) -> Packet:
+    # TODO: implement this function
     pass
+
+
+def make_wrq(file_name) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+def make_data(blk, data) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+############################################
+############ D E C O D E R S ###############
+############################################
+# The following methods convert byte arrays
+# received from sockets to packet objects.
+############################################
+def decode_ack(packet_bytes) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+def decode_rrq(packet_bytes) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+def decode_wrq(packet_bytes) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+def decode_data(packet_bytes) -> Packet:
+    # TODO: implement this function
+    pass
+
+
+def decode_packet_bytes(packet_bytes) -> Packet:
+    """
+    Accepts packet bytes received 
+    from socket. the first 2 bytes have
+    the packet type according to the RFC.
+
+    Extract the packet type then call the
+    appropriate function from decode_***
+    accordingly.
+    """
+    # TODO: implement this function
+    pass
+
+############################################
+############ E N C O D E R S ###############
+############################################
+# The following methods convert Packet
+# objects to bytes to make them ready to be
+# sent using sockets.
+############################################
+
+
+def encode_ack(packet: Packet) -> bytes:
+    # TODO: implement this function
+    pass
+
+
+def encode_rrq(packet: Packet) -> bytes:
+    # TODO: implement this function
+    pass
+
+
+def encode_wrq(packet: Packet) -> bytes:
+    # TODO: implement this function
+    pass
+
+
+def encode_data(packet: Packet) -> bytes:
+    # TODO: implement this function
+    pass
+
+
+def encode_packet_bytes(packet: Packet) -> bytes:
+    """
+    Convert the packet object to an array
+    of bytes to be sent to the socket.
+
+    Convert the object according to the
+    order of fields and their sizes in the
+    RFC.
+    """
+    if packet.packet_type == PacketType.ACK:
+        return encode_ack(packet)
+
+    # .. etc
+    # TODO: implement this function
+    pass
+############################################
 
 
 def setup_sockets(address):
@@ -138,38 +156,43 @@ def setup_sockets(address):
     pass
 
 
-def do_socket_logic():
-    """
-    Example function for some helper logic, in case you
-    want to be tidy and avoid stuffing the main function.
-
-    Feel free to delete this function.
-    """
+def pull_operation(file_name, ip_address):
+    # TODO: implement this function
+    # Do the logic for download
     pass
 
 
-def parse_user_input(address, operation, file_name=None):
-    # Your socket logic can go here,
-    # you can surely add new functions
-    # to contain the socket code. 
-    # But don't add socket code in the TftpProcessor class.
-    # Feel free to delete this code as long as the
-    # functionality is preserved.
-    if operation == "push":
-        print(f"Attempting to upload [{file_name}]...")
-        pass
-    elif operation == "pull":
-        print(f"Attempting to download [{file_name}]...")
-        pass
+def push_operation(file_name, ip_address):
+    # TODO: implement this function
+    # Do the logic for upload
+    pass
+
+
+############################################
+################ L E A V E #################
+################ A L O N E #################
+
+
+def check_file_name():
+    """
+    Do NOT use this function.
+
+    Leave as is.
+    """
+    script_name = os.path.basename(__file__)
+    import re
+    matches = re.findall(r"(\d{4}_)+lab1\.(py|rar|zip)", script_name)
+    if not matches:
+        print(f"[WARN] File name is invalid [{script_name}]")
+    pass
 
 
 def get_arg(param_index, default=None):
     """
-        Gets a command line argument by index (note: index starts from 1)
-        If the argument is not supplies, it tries to use a default value.
+    Gets a command-line argument by index
+    falling back to a default value on error.
 
-        If a default value isn't supplied, an error message is printed
-        and terminates the program.
+    Leave as is.
     """
     try:
         return sys.argv[param_index]
@@ -185,25 +208,24 @@ def get_arg(param_index, default=None):
 
 def main():
     """
-     Write your code above this function.
-    if you need the command line arguments
+    Leave as is.
     """
     print("*" * 50)
     print("[LOG] Printing command line arguments\n", ",".join(sys.argv))
     check_file_name()
     print("*" * 50)
 
-    # This argument is required.
-    # For a server, this means the IP that the server socket
-    # will use.
-    # The IP of the server, some default values
-    # are provided. Feel free to modify them.
-    ip_address = get_arg(1, "127.0.0.1")
+    ip_address = get_arg(1, "127.0.0.1")    # IP address of the server
     operation = get_arg(2, "pull")
     file_name = get_arg(3, "test.txt")
 
     # Modify this as needed.
-    parse_user_input(ip_address, operation, file_name)
+    if operation == "push":
+        print(f"Attempting to upload [{file_name}]...")
+        push_operation(file_name, ip_address)
+    elif operation == "pull":
+        print(f"Attempting to download [{file_name}]...")
+        pull_operation(file_name, ip_address)
 
 
 if __name__ == "__main__":
