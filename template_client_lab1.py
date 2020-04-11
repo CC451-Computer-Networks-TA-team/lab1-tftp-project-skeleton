@@ -99,6 +99,7 @@ def decode_packet_bytes(packet_bytes) -> Packet:
     # TODO: implement this function
     # Learn about Array slicing in Python.
     packet_type_bytes = packet_bytes[:2]
+    # use struct module to decode the packet type.
     pass
 
 ############################################
@@ -169,6 +170,9 @@ def push_operation(file_name, ip_address):
     # Do the logic for upload
     pass
 
+# TODO: Feel free to add functions here, don't repeat code please.
+# def transfer_data(server_socket):
+#     pass
 
 ############################################
 ################ L E A V E #################
@@ -183,7 +187,8 @@ def check_file_name():
     """
     script_name = os.path.basename(__file__)
     import re
-    matches = re.findall(r"(\d{4}_)+lab1\.(py|rar|zip)", script_name)
+    regexp_str = r"(\d{4,})(_\d{4,})?_(client|server)_lab1\.py"
+    matches = re.findall(regexp_str, script_name)
     if not matches:
         print(f"[WARN] File name is invalid [{script_name}]")
     pass
@@ -217,17 +222,18 @@ def main():
     check_file_name()
     print("*" * 50)
 
-    ip_address = get_arg(1, "127.0.0.1")    # IP address of the server
-    operation = get_arg(2, "pull")
-    file_name = get_arg(3, "test.txt")
+    operation = get_arg(1, "pull")
+    file_name = get_arg(2, "test.txt")
+    server_ip_address = get_arg(3, "127.0.0.1")    # IP address of the server
+    server_port = get_arg(4, 69)    # Port number of the server
 
     # Modify this as needed.
     if operation == "push":
         print(f"Attempting to upload [{file_name}]...")
-        push_operation(file_name, ip_address)
+        push_operation(file_name, server_ip_address)
     elif operation == "pull":
         print(f"Attempting to download [{file_name}]...")
-        pull_operation(file_name, ip_address)
+        pull_operation(file_name, server_ip_address)
 
 
 if __name__ == "__main__":

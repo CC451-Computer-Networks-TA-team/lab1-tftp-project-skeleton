@@ -89,7 +89,7 @@ def decode_packet_bytes(packet_bytes) -> Packet:
     # TODO: implement this function
     # Learn about Array slicing in Python.
     packet_type_bytes = packet_bytes[:2]
-
+    # use struct module to decode the packet type.
     pass
 
 ############################################
