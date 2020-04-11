@@ -25,10 +25,10 @@ class PacketType(enum.Enum):
 
 class Packet(object):
     """
-    Represents a TFTP packet, add
-    fields you need as in make_ack.
+    Represents a TFTP packet.
 
     Leave as is.
+    To know how to use this class, check make_ack function.
     """
 
     def __init__(self, packet_type: PacketType):
@@ -97,6 +97,8 @@ def decode_packet_bytes(packet_bytes) -> Packet:
     accordingly.
     """
     # TODO: implement this function
+    # Learn about Array slicing in Python.
+    packet_type_bytes = packet_bytes[:2]
     pass
 
 ############################################
