@@ -160,8 +160,11 @@ def main():
     check_file_name()
     print("*" * 50)
 
+    # NEVER remove the command line arguments or ignore them.
+    # ALWAYS use them in your code, as the grader will pass them
+    # to your code the same way.
     ip_address = get_arg(1, "127.0.0.1")    # IP address of the server
-    port_number = get_arg(1, 69)
+    port_number = int(get_arg(2, "69")) # Change the default value for development if you want.
     server_logic(ip_address, port_number)
 
 
